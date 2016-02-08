@@ -35,6 +35,14 @@ void indicate(int pin) {
   digitalWrite(pin, LOW);    // turn the LED off by making the voltage LOW
   }
 
+void indicateAll() {
+  digitalWrite(IND1, HIGH);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(IND2, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(200);               // wait for a second
+  digitalWrite(IND1, LOW);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(IND2, LOW);   // turn the LED on (HIGH is the voltage level)
+}
+
 void blink() {
   digitalWrite(LED, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(500);               // wait for a second
@@ -95,6 +103,7 @@ void readDips() {
   dip1State = digitalRead(DIP1);
   dip2State = digitalRead(DIP2);
 }
+
 void loop() {
   readDips();
   if( isr_flag == 1 ) {
@@ -133,6 +142,7 @@ void handleGesture() {
           #ifdef _DEBUG
           Serial.println("LEFT");
           #endif
+          indicateAll();
         }
         break;
       case DIR_RIGHT:
@@ -140,6 +150,7 @@ void handleGesture() {
           #ifdef _DEBUG
           Serial.println("RIGHT");
           #endif
+          indicateAll();
         }
         break;
       case DIR_NEAR:
@@ -147,6 +158,8 @@ void handleGesture() {
           #ifdef _DEBUG
           Serial.println("NEAR");
           #endif
+          indicate(IND1);
+          indicate(IND2);
         }
         break;
       case DIR_FAR:
@@ -154,6 +167,8 @@ void handleGesture() {
          #ifdef _DEBUG
          Serial.println("FAR");
           #endif
+          indicate(IND2);
+          indicate(IND1);
         }
         break;
       default:
