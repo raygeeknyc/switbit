@@ -8,12 +8,10 @@
  *******************
 */
 
-#define _DEBUG
+#define NO_DEBUG
 
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
-
-#define _DEBUG
 
 // Pins
 #define APDS9960_INT    2 // Needs to be an interrupt pin
@@ -120,61 +118,62 @@ void interruptRoutine() {
 
 void handleGesture() {
     if ( apds.isGestureAvailable() ) {
-    switch ( apds.readGesture() ) {
-      case DIR_UP:
-        if (dip1State == HIGH) {
+      switch ( apds.readGesture() ) {
+        case DIR_UP:
+          if (dip1State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("UP");
+            #endif
+            indicate(IND1);
+          }
+          break;
+        case DIR_DOWN:
+          if (dip1State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("DOWN");
+            #endif
+            indicate(IND2);
+          }
+          break;
+        case DIR_LEFT:
+          if (dip1State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("LEFT");
+            #endif
+            indicateAll();
+          }
+          break;
+        case DIR_RIGHT:
+          if (dip1State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("RIGHT");
+            #endif
+            indicateAll();
+          }
+          break;
+        case DIR_NEAR:
+          if (dip2State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("NEAR");
+            #endif
+            indicate(IND1);
+            indicate(IND2);
+          }
+          break;
+        case DIR_FAR:
+          if (dip2State == HIGH) {
+            #ifdef _DEBUG
+            Serial.println("FAR");
+            #endif
+            indicate(IND2);
+            indicate(IND1);
+          }
+          break;
+        default:
           #ifdef _DEBUG
-          Serial.println("UP");
+          Serial.println("NONE");
           #endif
-          indicate(IND1);
-        }
-        break;
-      case DIR_DOWN:
-        if (dip1State == HIGH) {
-          #ifdef _DEBUG
-          Serial.println("DOWN");
-          #endif
-          indicate(IND2);
-        }
-        break;
-      case DIR_LEFT:
-        if (dip1State == HIGH) {
-          #ifdef _DEBUG
-          Serial.println("LEFT");
-          #endif
-          indicateAll();
-        }
-        break;
-      case DIR_RIGHT:
-        if (dip1State == HIGH) {
-          #ifdef _DEBUG
-          Serial.println("RIGHT");
-          #endif
-          indicateAll();
-        }
-        break;
-      case DIR_NEAR:
-        if (dip2State == HIGH) {
-          #ifdef _DEBUG
-          Serial.println("NEAR");
-          #endif
-          indicate(IND1);
-          indicate(IND2);
-        }
-        break;
-      case DIR_FAR:
-        if (dip2State == HIGH) {
-         #ifdef _DEBUG
-         Serial.println("FAR");
-          #endif
-          indicate(IND2);
-          indicate(IND1);
-        }
-        break;
-      default:
-        #ifdef _DEBUG
-        Serial.println("NONE");
-        #endif
+          ;
+      }
     }
   }
-}
